@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
-import { Participant, getParticipants, addParticipant, deleteParticipant, Discipline, getDisciplines, searchParticipants } from "../services/apiFacade";
+import {
+    Participant,
+    getParticipants,
+    addParticipant,
+    deleteParticipant,
+    Discipline,
+    getDisciplines,
+    searchParticipants,
+} from "../services/apiFacade";
 import DeleteModal from "../components/Modals/DeleteModal";
-import AddParticipantModal from "../components/Modals/AddParticipantModal";
-import EditParticipantModal from "../components/Modals/EditParticipantModal";
+import AddParticipantModal from "./modal/AddParticipantModal";
+import EditParticipantModal from "./modal/EditParticipantModal";
 import "./participantsList.css";
 export default function ParticipantsList() {
     const [participants, setParticipants] = useState<Participant[]>([]);

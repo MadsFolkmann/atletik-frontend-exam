@@ -115,6 +115,7 @@ async function getDisciplines(): Promise<Array<Discipline>> {
     }
 }
 
+
 async function getResults(): Promise<Array<Result>> {
     if (Results.length > 0) return [...Results];
     try {
@@ -133,9 +134,35 @@ async function getResults(): Promise<Array<Result>> {
     }
 }
 
+async function addResult(newResult: Result): Promise<Result> {
+    const method = newResult.id ? "PUT" : "POST";
+    const options = makeOptions(method, newResult, true);
+    const URL = newResult.id ? `${RESULT_URL}/${newResult.id}` : RESULT_URL;
+    return fetch(URL, options).then(handleHttpErrors);
+}
 
+async function deleteResult(id: number): Promise<void> {
+    const options = makeOptions("DELETE", null, true); // Ensure headers and method are correctly set
+    return fetch(`${RESULT_URL}/${id}`, options).then((response) => {
+        if (response.ok) {
+            // Handle both cases where the server might not return any content
+            return response.text().then((text) => (text ? JSON.parse(text) : {}));
+        } else {
+            // Extract error message from response, if any
+            return response.text().then((text) => {
+                const error = text ? JSON.parse(text) : { message: "Failed to delete the result" };
+                throw new Error(error.message);
+            });
+        }
+    });
+}
+
+async function searchResults(searchTerm: string): Promise<Array<Result>> {
+    const options = makeOptions("GET", null, true);
+    return fetch(`${RESULT_URL}/search?participantName=${searchTerm}`, options).then(handleHttpErrors);
+}
 
 
 export type { Participant, Discipline, Result };
-export { getParticipants, addParticipant, deleteParticipant, getDisciplines, getResults, Gender, ResultType, searchParticipants };
-
+export { getParticipants, addParticipant, deleteParticipant, getDisciplines, Gender, ResultType, searchParticipants };
+export {getResults, addResult, deleteResult, searchResults };
