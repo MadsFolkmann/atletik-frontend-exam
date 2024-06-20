@@ -1,10 +1,11 @@
-/* Container og Header */
+/* Home.css */
 .home-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
   padding: 0 20px;
+  background: url('/athletics-background.png') no-repeat center center fixed;
   background-size: cover;
   animation: moveBackground 30s linear infinite;
 }
