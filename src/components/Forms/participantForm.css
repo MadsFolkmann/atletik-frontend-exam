@@ -1,0 +1,53 @@
+/* participantForm.css */
+.participant-form-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.participant-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.participant-form label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.participant-form input,
+.participant-form select {
+    padding: 8px;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+.participant-form button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.participant-form button:hover {
+    background-color: #218838;
+}
+
+.participant-form button.delete {
+    background-color: #dc3545;
+}
+
+.participant-form button.delete:hover {
+    background-color: #c82333;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+}
