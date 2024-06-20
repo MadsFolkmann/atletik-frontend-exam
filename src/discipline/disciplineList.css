@@ -1,9 +1,9 @@
-.add-result-container {
+.add-discipline-container {
     text-align: center;
     margin-bottom: 20px;
 }
 
-.add-result-button {
+.add-discipline-button {
     background-color: #28a745;
     color: #fff;
     border: none;
@@ -13,7 +13,7 @@
     transition: background-color 0.3s ease;
 }
 
-.add-result-button:hover {
+.add-discipline-button:hover {
     background-color: #218838;
 }
 
@@ -33,16 +33,10 @@ table thead {
     color: #ffffff;
 }
 
-table th {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    color: #ffffff; /* Ensure text color is white */
-}
-
+table th,
 table td {
     padding: 12px 15px;
     border: 1px solid #ddd;
-    color: #000000; /* Ensure text color is black */
 }
 
 table tbody tr {
@@ -77,35 +71,4 @@ table button.delete {
 
 table button.delete:hover {
     background-color: #c82333;
-}
-
-.search-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.search-container input {
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    margin-right: 10px;
-    flex-grow: 1;
-    color: #000000; /* Ensure text color is black */
-    background-color: #ffffff; /* Ensure background color is white */
-}
-
-.search-container button {
-    padding: 8px 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.search-container button:hover {
-    background-color: #0056b3;
 }

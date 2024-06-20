@@ -13,7 +13,7 @@ enum Gender {
 enum ResultType {
     TIME = "TIME",
     DISTANCE = "DISTANCE",
-    POINTS = "POINTS",
+    POINT = "POINT",
 }
 
 interface Discipline {
@@ -115,6 +115,29 @@ async function getDisciplines(): Promise<Array<Discipline>> {
     }
 }
 
+async function addDiscipline(newDiscipline: Discipline): Promise<Discipline> {
+    const method = newDiscipline.id ? "PUT" : "POST";
+    const options = makeOptions(method, newDiscipline, true);
+    const URL = newDiscipline.id ? `${DISCIPLINE_URL}/${newDiscipline.id}` : DISCIPLINE_URL;
+    return fetch(URL, options).then(handleHttpErrors);
+}
+
+async function deleteDiscipline(id: number): Promise<void> {
+    const options = makeOptions("DELETE", null, true); // Ensure headers and method are correctly set
+    return fetch(`${DISCIPLINE_URL}/${id}`, options).then((response) => {
+        if (response.ok) {
+            // Handle both cases where the server might not return any content
+            return response.text().then((text) => (text ? JSON.parse(text) : {}));
+        } else {
+            // Extract error message from response, if any
+            return response.text().then((text) => {
+                const error = text ? JSON.parse(text) : { message: "Failed to delete the discipline" };
+                throw new Error(error.message);
+            });
+        }
+    });
+}
+
 
 async function getResults(): Promise<Array<Result>> {
     if (Results.length > 0) return [...Results];
@@ -164,5 +187,6 @@ async function searchResults(searchTerm: string): Promise<Array<Result>> {
 
 
 export type { Participant, Discipline, Result };
-export { getParticipants, addParticipant, deleteParticipant, getDisciplines, Gender, ResultType, searchParticipants };
+export { getParticipants, addParticipant, deleteParticipant, Gender, ResultType, searchParticipants };
 export {getResults, addResult, deleteResult, searchResults };
+export { getDisciplines, addDiscipline, deleteDiscipline}

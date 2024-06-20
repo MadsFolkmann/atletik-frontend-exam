@@ -5,7 +5,6 @@
   justify-content: space-between;
   min-height: 100vh;
   padding: 0 20px;
-  /* background: url("YOUR_BACKGROUND_IMAGE_URL") no-repeat center center fixed; */
   background-size: cover;
   animation: moveBackground 30s linear infinite;
 }
@@ -19,30 +18,8 @@
   }
 }
 
-h2 {
-    color: white;
-    font-size: 2rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-
-h1 {
-    color: white;
-    font-size: 3rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-}
-p {
-    color: white;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
-}
-
-h4 {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin-bottom: 10px;
+h1, h2, h3, h4, p {
+  color: white;  /* Ensuring all text is white */
 }
 
 .hero-section {
@@ -62,9 +39,6 @@ h4 {
     opacity: 1;
   }
 }
-
-
-
 
 /* Hovedindhold */
 .main-content {
@@ -123,8 +97,6 @@ h4 {
     transform: scale(1);
   }
 }
-
-
 
 /* Footer */
 .footer {

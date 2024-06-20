@@ -1,6 +1,6 @@
 import React from "react";
-import BaseModal from "../../components/Modals/BaseModal";
-import ParticipantForm from "../../components/Forms/ParticipantForm";
+import BaseModal from "../../components/BaseModal";
+import ParticipantForm from "../form/ParticipantForm";
 import { Participant } from "../../services/apiFacade";
 
 interface EditParticipantModalProps {

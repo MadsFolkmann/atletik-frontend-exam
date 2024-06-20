@@ -10,7 +10,7 @@ import {
     getParticipants,
     searchResults,
 } from "../services/apiFacade";
-import DeleteModal from "../components/Modals/DeleteModal";
+import DeleteResultModal from "./modal/DeleteResultModal";
 import AddResultModal from "./modal/AddResultModal";
 import EditResultModal from "./modal/EditResultModal";
 import "./resultList.css";
@@ -20,11 +20,16 @@ export default function ResultsList() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [selectedResultId, setSelectedResultId] = useState<number | null>(null);
-    const [selectedResultName, setSelectedResultName] = useState<string | null>(null);
+    const [selectedResult, setSelectedResult] = useState<Result | null>(null);
     const [disciplines, setDisciplines] = useState<Discipline[]>([]);
     const [participants, setParticipants] = useState<Participant[]>([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [filters, setFilters] = useState({
+        gender: "",
+        ageGroup: "",
+        discipline: "",
+    });
+    const [sortConfig, setSortConfig] = useState({ key: "resultValue", direction: "desc" });
 
     useEffect(() => {
         getResults().then(setResults);
@@ -33,9 +38,9 @@ export default function ResultsList() {
     }, []);
 
     function handleDelete() {
-        if (selectedResultId !== null) {
-            deleteResult(selectedResultId).then(() => {
-                setResults(results.filter((result) => result.id !== selectedResultId));
+        if (selectedResult !== null) {
+            deleteResult(selectedResult.id).then(() => {
+                setResults(results.filter((result) => result.id !== selectedResult.id));
                 setIsDeleteModalOpen(false);
             });
         }
@@ -56,14 +61,12 @@ export default function ResultsList() {
     }
 
     function editResult(result: Result) {
-        setSelectedResultId(result.id);
-        setSelectedResultName(result.participant.name);
+        setSelectedResult(result);
         setIsEditModalOpen(true);
     }
 
-    function openDeleteModal(id: number, name: string) {
-        setSelectedResultId(id);
-        setSelectedResultName(name);
+    function openDeleteModal(result: Result) {
+        setSelectedResult(result);
         setIsDeleteModalOpen(true);
     }
 
@@ -75,12 +78,77 @@ export default function ResultsList() {
         }
     }
 
+    function handleFilterChange(e: React.ChangeEvent<HTMLSelectElement>) {
+        const { name, value } = e.target;
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: value,
+        }));
+    }
+
+    function handleSort(key: string) {
+        let direction = "asc";
+        if (sortConfig.key === key && sortConfig.direction === "asc") {
+            direction = "desc";
+        }
+        setSortConfig({ key, direction });
+    }
+
+    function applyFilters(results: Result[]) {
+        return results.filter((result) => {
+            return (
+                (filters.gender === "" || result.participant.gender === filters.gender) &&
+                (filters.ageGroup === "" ||
+                    (filters.ageGroup === "young" && result.participant.age < 30) ||
+                    (filters.ageGroup === "adult" && result.participant.age >= 30)) &&
+                (filters.discipline === "" || result.discipline.name === filters.discipline)
+            );
+        });
+    }
+
+    function applySort(results: Result[]) {
+        if (sortConfig.key === "") return results;
+
+        const sortedResults = [...results];
+        sortedResults.sort((a, b) => {
+            if (a[sortConfig.key] < b[sortConfig.key]) {
+                return sortConfig.direction === "asc" ? -1 : 1;
+            }
+            if (a[sortConfig.key] > b[sortConfig.key]) {
+                return sortConfig.direction === "asc" ? 1 : -1;
+            }
+            return 0;
+        });
+        return sortedResults;
+    }
+
+    const filteredAndSortedResults = applySort(applyFilters(results));
+
     return (
         <div>
             <h2>Results</h2>
-            <div className="search-container">
+            <div className="filter-container">
                 <input type="text" placeholder="Search by participant name" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
                 <button onClick={handleSearch}>Search</button>
+                <select name="gender" value={filters.gender} onChange={handleFilterChange}>
+                    <option value="">All Genders</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                </select>
+                <select name="ageGroup" value={filters.ageGroup} onChange={handleFilterChange}>
+                    <option value="">All Ages</option>
+                    <option value="young">Under 30</option>
+                    <option value="adult">30 and above</option>
+                </select>
+                <select name="discipline" value={filters.discipline} onChange={handleFilterChange}>
+                    <option value="">All Disciplines</option>
+                    {disciplines.map((discipline) => (
+                        <option key={discipline.id} value={discipline.name}>
+                            {discipline.name}
+                        </option>
+                    ))}
+                </select>
             </div>
             <div className="add-result-container">
                 <button className="add-result-button" onClick={() => setIsAddModalOpen(true)}>
@@ -92,14 +160,14 @@ export default function ResultsList() {
                     <tr>
                         <th>Date</th>
                         <th>Result Type</th>
-                        <th>Result Value</th>
+                        <th onClick={() => handleSort("resultValue")}>Result Value</th>
                         <th>Discipline</th>
                         <th>Participant</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {results.map((result) => (
+                    {filteredAndSortedResults.map((result) => (
                         <tr key={result.id}>
                             <td>{new Date(result.date).toLocaleDateString()}</td>
                             <td>{result.resultType}</td>
@@ -108,7 +176,7 @@ export default function ResultsList() {
                             <td>{result.participant.name}</td>
                             <td>
                                 <button onClick={() => editResult(result)}>Edit</button>
-                                <button className="delete" onClick={() => openDeleteModal(result.id, result.participant.name)}>
+                                <button className="delete" onClick={() => openDeleteModal(result)}>
                                     Delete
                                 </button>
                             </td>
@@ -117,11 +185,11 @@ export default function ResultsList() {
                 </tbody>
             </table>
             {isDeleteModalOpen && (
-                <DeleteModal
+                <DeleteResultModal
                     isOpen={isDeleteModalOpen}
                     onClose={() => setIsDeleteModalOpen(false)}
                     onDelete={handleDelete}
-                    participantName={selectedResultName}
+                    result={selectedResult}
                 />
             )}
             {isAddModalOpen && (
@@ -133,12 +201,12 @@ export default function ResultsList() {
                     participants={participants}
                 />
             )}
-            {isEditModalOpen && selectedResultId !== null && (
+            {isEditModalOpen && selectedResult !== null && (
                 <EditResultModal
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
                     onEdit={handleEdit}
-                    result={results.find((r) => r.id === selectedResultId)!}
+                    result={selectedResult}
                     disciplines={disciplines}
                     participants={participants}
                 />

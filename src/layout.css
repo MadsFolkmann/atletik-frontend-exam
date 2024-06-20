@@ -38,6 +38,7 @@ nav ul li a {
   display: inline-block;
   margin-right: 1rem;
 }
+
 .nav ul .active {
   color: lightblue;
   text-decoration: underline;
@@ -49,4 +50,9 @@ nav ul li a {
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+/* Ensuring all text content is white */
+h1, h2, h3, h4, h5, h6, p, span, div {
+  color: white !important;
 }

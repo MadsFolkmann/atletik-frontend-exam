@@ -1,4 +1,3 @@
-// BaseModal.tsx
 import React from "react";
 import "./ModalStyle.css";
 
@@ -14,7 +13,9 @@ const BaseModal: React.FC<BaseModalProps> = ({ isOpen, onClose, children }) => {
     return (
         <div className="modal-backdrop">
             <div className="modal-content">
-                <button className="closebtn" onClick={onClose}>Close</button>
+                <button className="close" onClick={onClose}>
+                    ×
+                </button>
                 {children}
             </div>
         </div>

@@ -1,7 +1,7 @@
 import React from "react";
-import BaseModal from "../BaseModal";
-import DisciplineForm from "../../Forms/resultForm";
-import { Discipline } from "../../../services/apiFacade";
+import BaseModal from "../../components/BaseModal";
+import DisciplineForm from "../form/DisciplineForm";
+import { Discipline } from "../../services/apiFacade";
 
 interface AddDisciplineModalProps {
     isOpen: boolean;

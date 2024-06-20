@@ -1,6 +1,6 @@
 import React from "react";
-import BaseModal from "../../components/Modals/BaseModal";
-import ResultForm from "../../components/Forms/resultForm";
+import BaseModal from "../../components/BaseModal";
+import ResultForm from "../form/resultForm";
 import { Result } from "../../services/apiFacade";
 
 interface EditResultModalProps {

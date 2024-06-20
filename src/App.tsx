@@ -4,6 +4,7 @@ import Home from "./Home";
 import "./App.css";
 import ParticipantsList from "./participants/ParticipantsList";
 import ResultsList from "./results/ResultList";
+import DisciplineList from "./discipline/DisciplinList";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/participants" element={<ParticipantsList />} />
               <Route path="/results" element={<ResultsList />} />
+              <Route path="/discipline" element={<DisciplineList />} />
           </Routes>
       </Layout>
   );
