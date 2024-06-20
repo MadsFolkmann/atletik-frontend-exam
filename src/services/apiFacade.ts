@@ -67,6 +67,11 @@ async function getParticipants(): Promise<Array<Participant>> {
     }
 }
 
+async function searchParticipants(name: string): Promise<Array<Participant>> {
+    const options = makeOptions("GET", null, true);
+    return fetch(`${PARTICIPANT_URL}/search?name=${name}`, options).then(handleHttpErrors);
+}
+
 
 async function addParticipant(newParticipant: Participant): Promise<Participant> {
     const method = newParticipant.id ? "PUT" : "POST";
@@ -132,5 +137,5 @@ async function getResults(): Promise<Array<Result>> {
 
 
 export type { Participant, Discipline, Result };
-export { getParticipants, addParticipant, deleteParticipant, getDisciplines, getResults, Gender, ResultType };
+export { getParticipants, addParticipant, deleteParticipant, getDisciplines, getResults, Gender, ResultType, searchParticipants };
 

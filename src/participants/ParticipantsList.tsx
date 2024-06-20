@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { Participant, getParticipants, addParticipant, deleteParticipant } from "../services/apiFacade";
+import { Participant, getParticipants, addParticipant, deleteParticipant, Discipline, getDisciplines, searchParticipants } from "../services/apiFacade";
 import DeleteModal from "../components/Modals/DeleteModal";
 import AddParticipantModal from "../components/Modals/AddParticipantModal";
 import EditParticipantModal from "../components/Modals/EditParticipantModal";
 import "./participantsList.css";
-
 export default function ParticipantsList() {
     const [participants, setParticipants] = useState<Participant[]>([]);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -12,9 +11,12 @@ export default function ParticipantsList() {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedParticipantId, setSelectedParticipantId] = useState<number | null>(null);
     const [selectedParticipantName, setSelectedParticipantName] = useState<string | null>(null);
+    const [disciplines, setDisciplines] = useState<Discipline[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
         getParticipants().then(setParticipants);
+        getDisciplines().then(setDisciplines);
     }, []);
 
     function handleDelete() {
@@ -27,8 +29,6 @@ export default function ParticipantsList() {
     }
 
     function handleAdd(participant: Participant) {
-        console.log("This is the ", participant);
-        
         addParticipant(participant).then((newParticipant) => {
             setParticipants([...participants, newParticipant]);
             setIsAddModalOpen(false);
@@ -36,8 +36,6 @@ export default function ParticipantsList() {
     }
 
     function handleEdit(participant: Participant) {
-                console.log("This is the ", participant);
-
         addParticipant(participant).then((updatedParticipant) => {
             setParticipants(participants.map((p) => (p.id === updatedParticipant.id ? updatedParticipant : p)));
             setIsEditModalOpen(false);
@@ -56,9 +54,21 @@ export default function ParticipantsList() {
         setIsDeleteModalOpen(true);
     }
 
+    function handleSearch() {
+        if (searchTerm.trim() !== "") {
+            searchParticipants(searchTerm).then(setParticipants);
+        } else {
+            getParticipants().then(setParticipants);
+        }
+    }
+
     return (
         <div>
             <h2>Participants</h2>
+            <div className="search-container">
+                <input type="text" placeholder="Search by name" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                <button onClick={handleSearch}>Search</button>
+            </div>
             <div className="add-participant-container">
                 <button className="add-participant-button" onClick={() => setIsAddModalOpen(true)}>
                     Add Participant
@@ -70,6 +80,7 @@ export default function ParticipantsList() {
                         <th>Name</th>
                         <th>Age</th>
                         <th>Club</th>
+                        <th>Disciplines</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -79,6 +90,7 @@ export default function ParticipantsList() {
                             <td>{participant.name}</td>
                             <td>{participant.age}</td>
                             <td>{participant.club}</td>
+                            <td>{participant.disciplines?.map((discipline) => discipline.name).join(", ")}</td>
                             <td>
                                 <button onClick={() => editParticipant(participant)}>Edit</button>
                                 <button className="delete" onClick={() => openDeleteModal(participant.id, participant.name)}>
