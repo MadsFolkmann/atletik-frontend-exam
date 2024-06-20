@@ -1,53 +1,72 @@
-/* participantForm.css */
-.participant-form-container {
+/* Common form styles */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
     padding: 20px;
-    text-align: center;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.participant-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.form-container label {
+    font-weight: bold;
+    margin-bottom: 5px;
 }
 
-.participant-form label {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.form-container input,
+.form-container select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     font-size: 16px;
-    margin-bottom: 10px;
 }
 
-.participant-form input,
-.participant-form select {
-    padding: 8px;
-    font-size: 16px;
-    margin-top: 5px;
+.form-container input:focus,
+.form-container select:focus {
+    outline: none;
+    border-color: #007bff;
 }
 
-.participant-form button {
-    background-color: #28a745;
-    color: white;
-    border: none;
+.form-container button {
     padding: 10px 20px;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
     transition: background-color 0.3s ease;
 }
 
-.participant-form button:hover {
+.form-container button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+}
+
+.form-container button[type="submit"]:hover {
     background-color: #218838;
 }
 
-.participant-form button.delete {
+.form-container button[type="button"] {
     background-color: #dc3545;
+    color: white;
 }
 
-.participant-form button.delete:hover {
+.form-container button[type="button"]:hover {
     background-color: #c82333;
 }
 
-.error {
-    color: red;
-    font-size: 14px;
+/* Specific styles for checkboxes */
+.form-container .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.form-container .checkbox-group label {
+    display: flex;
+    align-items: center;
+}
+
+.form-container .checkbox-group input {
+    margin-right: 5px;
 }

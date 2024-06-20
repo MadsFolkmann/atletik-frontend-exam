@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Participant, Gender, Discipline, getDisciplines } from "../../services/apiFacade";
-import "./participantForm.css";
+
 
 interface ParticipantFormProps {
     onSubmit: (participant: Participant) => void;

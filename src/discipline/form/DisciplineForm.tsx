@@ -2,12 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Discipline, ResultType } from "../../services/apiFacade";
 
 
-interface DisciplineFormProps {
-    onSubmit: (discipline: Discipline) => void;
-    onClose: () => void;
-    discipline?: Discipline;
-}
-
 const DisciplineForm: React.FC<DisciplineFormProps> = ({ onSubmit, onClose, discipline }) => {
     const [name, setName] = useState(discipline?.name || "");
     const [resultType, setResultType] = useState<ResultType>(discipline?.resultType || ResultType.TIME);
@@ -30,7 +24,7 @@ const DisciplineForm: React.FC<DisciplineFormProps> = ({ onSubmit, onClose, disc
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="form-container" onSubmit={handleSubmit}>
             <div>
                 <label>Name:</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
@@ -38,6 +32,9 @@ const DisciplineForm: React.FC<DisciplineFormProps> = ({ onSubmit, onClose, disc
             <div>
                 <label>Result Type:</label>
                 <select value={resultType} onChange={(e) => setResultType(e.target.value as ResultType)} required>
+                    <option value="" disabled>
+                        Select discipline
+                    </option>
                     <option value={ResultType.TIME}>Time</option>
                     <option value={ResultType.DISTANCE}>Distance</option>
                     <option value={ResultType.POINT}>Point</option>

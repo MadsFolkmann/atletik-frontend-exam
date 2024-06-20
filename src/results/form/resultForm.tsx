@@ -1,19 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Result, Discipline, Participant, ResultType, getDisciplines, getParticipants } from "../../services/apiFacade";
-// import "./resultForm.css";
 
-interface ResultFormProps {
-    onSubmit: (result: {
-        id: number | null;
-        date: Date;
-        resultType: ResultType;
-        resultValue: number;
-        disciplineId: number;
-        participantId: number;
-    }) => void;
-    onClose: () => void;
-    result?: Result;
-}
 
 const ResultForm: React.FC<ResultFormProps> = ({ onSubmit, onClose, result }) => {
     const [date, setDate] = useState(result ? new Date(result.date).toISOString().substr(0, 10) : new Date().toISOString().substr(0, 10));
@@ -50,7 +37,7 @@ const ResultForm: React.FC<ResultFormProps> = ({ onSubmit, onClose, result }) =>
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form className="form-container" onSubmit={handleSubmit}>
             <div>
                 <label>Date:</label>
                 <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
